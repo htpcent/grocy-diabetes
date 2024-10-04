@@ -47,6 +47,13 @@ Setting('CURRENCY', 'USD');
 // E.g. "kcal" or "kJ" or something else (doesn't really matter, it's only used to display energy values)
 Setting('ENERGY_UNIT', 'kcal');
 
+// custom start
+Setting('CARBOHYDRATES_UNIT', 'g');
+Setting('SUGAR_UNIT', 'g');
+Setting('FAT_UNIT', 'g');
+Setting('PROTEIN_UNIT', 'g');
+// custom end
+
 // When running Grocy in a subdirectory, this should be set to the relative path, otherwise empty
 // It needs to be set to the part (of the URL) AFTER the document root,
 // if URL rewriting is disabled, including index.php

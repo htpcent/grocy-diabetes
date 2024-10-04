@@ -97,6 +97,14 @@
 		Grocy.View = '{{ $viewName }}';
 		Grocy.Currency = '{{ GROCY_CURRENCY }}';
 		Grocy.EnergyUnit = '{{ GROCY_ENERGY_UNIT }}';
+
+/* custom start */
+		Grocy.CarbohydratesUnit = '{{ GROCY_CARBOHYDRATES_UNIT }}';
+		Grocy.SugarUnit = '{{ GROCY_SUGAR_UNIT }}';
+		Grocy.FatUnit = '{{ GROCY_FAT_UNIT }}';
+		Grocy.ProteinUnit = '{{ GROCY_PROTEIN_UNIT }}';
+/* custom end */
+
 		Grocy.CalendarFirstDayOfWeek = '{{ GROCY_CALENDAR_FIRST_DAY_OF_WEEK }}';
 		Grocy.CalendarShowWeekNumbers = {{ BoolToString(GROCY_CALENDAR_SHOW_WEEK_OF_YEAR) }};
 		Grocy.LocalizationStrings = {!! $LocalizationStrings !!};

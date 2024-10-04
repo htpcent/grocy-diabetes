@@ -158,6 +158,13 @@ $('.input-group-qu').on('change', function(e)
 	$("#quick_open_qu_info").text($("#qu_id_stock option:selected").text());
 	$("#energy_qu_info").text(Grocy.EnergyUnit + " / " + $("#qu_id_stock option:selected").text());
 
+	/* custom start */
+	$("#carbohydrates_qu_info").text(Grocy.CarbohydratesUnit + " / " + $("#qu_id_stock option:selected").text());
+	$("#sugar_qu_info").text(Grocy.SugarUnit + " / " + $("#qu_id_stock option:selected").text());
+	$("#fat_qu_info").text(Grocy.FatUnit + " / " + $("#qu_id_stock option:selected").text());
+	$("#protein_qu_info").text(Grocy.ProteinUnit + " / " + $("#qu_id_stock option:selected").text());
+	/* custom end */
+
 	Grocy.FrontendHelpers.ValidateForm('product-form');
 });
 

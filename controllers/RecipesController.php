@@ -99,10 +99,22 @@ class RecipesController extends BaseController
 
 		$totalCosts = null;
 		$totalCalories = null;
+//custom start
+		$totalCarbohydrates = null;
+		$totalSugar = null;
+		$totalProtein = null;
+		$totalFat = null;
+//custom end		
 		if ($selectedRecipe)
 		{
 			$totalCosts = FindObjectInArrayByPropertyValue($recipesResolved, 'recipe_id', $selectedRecipe->id)->costs;
 			$totalCalories = FindObjectInArrayByPropertyValue($recipesResolved, 'recipe_id', $selectedRecipe->id)->calories;
+//custom start
+			$totalCarbohydrates = FindObjectInArrayByPropertyValue($recipesResolved, 'recipe_id', $selectedRecipe->id)->carbohydrates;
+			$totalSugar = FindObjectInArrayByPropertyValue($recipesResolved, 'recipe_id', $selectedRecipe->id)->sugar;
+			$totalProtein = FindObjectInArrayByPropertyValue($recipesResolved, 'recipe_id', $selectedRecipe->id)->protein;
+			$totalFat = FindObjectInArrayByPropertyValue($recipesResolved, 'recipe_id', $selectedRecipe->id)->fat;
+//custom end
 		}
 
 		$viewData = [
@@ -117,6 +129,12 @@ class RecipesController extends BaseController
 			'quantityUnitConversionsResolved' => $this->getDatabase()->cache__quantity_unit_conversions_resolved(),
 			'selectedRecipeTotalCosts' => $totalCosts,
 			'selectedRecipeTotalCalories' => $totalCalories,
+//custom start
+			'selectedRecipeTotalCarbohydrates' => $totalCarbohydrates,
+			'selectedRecipeTotalCarbohydrates' => $totalSugar,
+			'selectedRecipeTotalCarbohydrates' => $totalProtein,
+			'selectedRecipeTotalCarbohydrates' => $totalFat,
+//custom end
 			'mealplanSections' => $this->getDatabase()->meal_plan_sections()->orderBy('sort_number')
 		];
 

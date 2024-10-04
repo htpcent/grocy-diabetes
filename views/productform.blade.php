@@ -508,6 +508,61 @@
 			'additionalCssClasses' => 'locale-number-input locale-number-quantity-amount'
 			))
 
+<!-- custom start -->
+
+			@php if($mode == 'edit') { $value = $product->carbohydrates; } else { $value = 0; } @endphp
+			@include('components.numberpicker', array(
+			'id' => 'carbohydrates',
+			'label' => 'Carbohydrates',
+			'min' => '0.' . str_repeat('0', $userSettings['stock_decimal_places_amounts']),
+			'decimals' => $userSettings['stock_decimal_places_amounts'],
+			'value' => $value,
+			'hint' => $__t('Per stock quantity unit'),
+			'contextInfoId' => 'carbohydrates_qu_info',
+			'isRequired' => false,
+			'additionalCssClasses' => 'locale-number-input locale-number-quantity-amount'
+			))
+
+			@php if($mode == 'edit') { $value = $product->sugar; } else { $value = 0; } @endphp
+			@include('components.numberpicker', array(
+			'id' => 'sugar',
+			'label' => 'Sugar',
+			'min' => '0.' . str_repeat('0', $userSettings['stock_decimal_places_amounts']),
+			'decimals' => $userSettings['stock_decimal_places_amounts'],
+			'value' => $value,
+			'hint' => $__t('Per stock quantity unit'),
+			'contextInfoId' => 'sugar_qu_info',
+			'isRequired' => false,
+			'additionalCssClasses' => 'locale-number-input locale-number-quantity-amount'
+			))
+
+			@php if($mode == 'edit') { $value = $product->protein; } else { $value = 0; } @endphp
+			@include('components.numberpicker', array(
+			'id' => 'protein',
+			'label' => 'Protein',
+			'min' => '0.' . str_repeat('0', $userSettings['stock_decimal_places_amounts']),
+			'decimals' => $userSettings['stock_decimal_places_amounts'],
+			'value' => $value,
+			'hint' => $__t('Per stock quantity unit'),
+			'contextInfoId' => 'protein_qu_info',
+			'isRequired' => false,
+			'additionalCssClasses' => 'locale-number-input locale-number-quantity-amount'
+			))
+			
+			@php if($mode == 'edit') { $value = $product->fat; } else { $value = 0; } @endphp
+			@include('components.numberpicker', array(
+			'id' => 'fat',
+			'label' => 'Fat',
+			'min' => '0.' . str_repeat('0', $userSettings['stock_decimal_places_amounts']),
+			'decimals' => $userSettings['stock_decimal_places_amounts'],
+			'value' => $value,
+			'hint' => $__t('Per stock quantity unit'),
+			'contextInfoId' => 'fat_qu_info',
+			'isRequired' => false,
+			'additionalCssClasses' => 'locale-number-input locale-number-quantity-amount'
+			))
+<!-- custom ende -->
+
 			@php if($mode == 'edit') { $value = $product->quick_consume_amount; } else { $value = 1; } @endphp
 			@include('components.numberpicker', array(
 			'id' => 'quick_consume_amount',

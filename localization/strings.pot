@@ -12,6 +12,22 @@ msgstr ""
 "Language: en\n"
 "X-Domain: grocy/strings\n"
 
+msgid "Carbohydrates"
+msgstr ""
+
+msgid "Sugar"
+msgstr ""
+
+msgid "Protein"
+msgstr ""
+
+msgid "Fat"
+msgstr ""
+
+
+
+
+
 msgid "Stock overview"
 msgstr ""
 

@@ -20,6 +20,27 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Domain: grocy/strings\n"
 
+
+msgid "Carbohydrates"
+msgstr "Kohlenhydrate"
+
+msgid "Sugar"
+msgstr "Zucker"
+
+msgid "Protein"
+msgstr "Eiweiß"
+
+msgid "Fat"
+msgstr "Fett"
+
+
+
+
+
+
+
+
+
 msgid "Stock overview"
 msgstr "Bestand"
 
