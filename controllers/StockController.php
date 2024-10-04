@@ -294,6 +294,21 @@ class StockController extends BaseController
 		]);
 	}
 
+// custom start
+	public function Diabetesproductinfo(Request $request, Response $response, array $args)
+	{
+		return $this->renderPage($response, 'diabetesproductinfo', [
+			'products' => $this->getDatabase()->products()->where('active = 1 AND no_own_stock = 0')->orderBy('name', 'COLLATE NOCASE'),
+			'barcodes' => $this->getDatabase()->product_barcodes_comma_separated(),
+			'shoppinglocations' => $this->getDatabase()->shopping_locations()->where('active = 1')->orderBy('name', 'COLLATE NOCASE'),
+			'locations' => $this->getDatabase()->locations()->where('active = 1')->orderBy('name', 'COLLATE NOCASE'),
+			'quantityUnits' => $this->getDatabase()->quantity_units()->where('active = 1')->orderBy('name', 'COLLATE NOCASE'),
+			'quantityUnitConversionsResolved' => $this->getDatabase()->cache__quantity_unit_conversions_resolved(),
+			'userfields' => $this->getUserfieldsService()->GetFields('stock')
+		]);
+	}
+// custom end
+
 	public function QuantityUnitConversionEditForm(Request $request, Response $response, array $args)
 	{
 		$product = null;

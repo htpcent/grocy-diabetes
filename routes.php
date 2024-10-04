@@ -65,6 +65,10 @@ $app->group('', function (RouteCollectorProxy $group)
 	$group->get('/quantityunitconversionsresolved', '\Grocy\Controllers\StockController:QuantityUnitConversionsResolved');
 	$group->get('/stockreports/spendings', '\Grocy\Controllers\StockReportsController:Spendings');
 
+// custom start 
+	$group->get('/diabetesproductinfo', '\Grocy\Controllers\StockController:Diabetesproductinfo');
+// custom end
+
 	// Stock price tracking
 	$group->get('/shoppinglocations', '\Grocy\Controllers\StockController:ShoppingLocationsList');
 	$group->get('/shoppinglocation/{shoppingLocationId}', '\Grocy\Controllers\StockController:ShoppingLocationEditForm');

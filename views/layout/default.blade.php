@@ -162,6 +162,18 @@
 			class="collapse navbar-collapse">
 			<ul class="navbar-nav navbar-sidenav">
 
+<!-- custom start -->
+				<li class="nav-item nav-item-sidebar permission-STOCK_PURCHASE @if($viewName == 'diabetesproductinfo') active-page @endif"
+					data-toggle="tooltip"
+					data-placement="right"
+					title="{{ $__t('Product Info') }}">
+					<a class="nav-link discrete-link"
+						href="{{ $U('/diabetesproductinfo') }}">
+						<i class="fa-solid fa-fw fa-cart-plus"></i>
+						<span class="nav-link-text">{{ $__t('Product Info') }}</span>
+					</a>
+				</li>
+<!-- custom end -->
 				@if(GROCY_FEATURE_FLAG_STOCK)
 				<li class="nav-item nav-item-sidebar @if($viewName == 'stockoverview') active-page @endif"
 					data-toggle="tooltip"
