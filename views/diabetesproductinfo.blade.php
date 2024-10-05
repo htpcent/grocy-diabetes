@@ -10,7 +10,7 @@
 <script>
 	Grocy.QuantityUnits = {!! json_encode($quantityUnits) !!};
 	Grocy.QuantityUnitConversionsResolved = {!! json_encode($quantityUnitConversionsResolved) !!};
-	Grocy.DefaultMinAmount = '{{ $DEFAULT_MIN_AMOUNT }}';
+	Grocy.DefaultMinAmount = '{{$DEFAULT_MIN_AMOUNT}}';
 </script>
 
 <div class="row">
@@ -27,19 +27,19 @@
 				id="related-links">
 				@if(!$embedded)
 				<button id="scan-mode-button"
-					class="btn @if(boolval($userSettings['scan_mode_purchase_enabled'])) btn-success @else btn-danger @endif m-1 mt-md-0 mb-md-0 float-right"
+					class="btn @if(boolval($userSettings['scan_mode_consume_enabled'])) btn-success @else btn-danger @endif m-1 mt-md-0 mb-md-0 float-right"
 					data-toggle="tooltip"
-					title="{{ $__t('When enabled, after changing/scanning a product and if all fields could be automatically populated (by product and/or barcode defaults), the transaction is automatically submitted') }}">{{ $__t('Scan mode') }} <span id="scan-mode-status">@if(boolval($userSettings['scan_mode_purchase_enabled'])) {{ $__t('on') }} @else {{ $__t('off') }} @endif</span></button>
+					title="{{ $__t('When enabled, after changing/scanning a product and if all fields could be automatically populated (by product and/or barcode defaults), the transaction is automatically submitted') }}">{{ $__t('Scan mode') }} <span id="scan-mode-status">@if(boolval($userSettings['scan_mode_consume_enabled'])) {{ $__t('on') }} @else {{ $__t('off') }} @endif</span></button>
 				<input id="scan-mode"
 					type="checkbox"
 					class="d-none user-setting-control"
-					data-setting-key="scan_mode_purchase_enabled"
-					@if(boolval($userSettings['scan_mode_purchase_enabled']))
+					data-setting-key="scan_mode_consume_enabled"
+					@if(boolval($userSettings['scan_mode_consume_enabled']))
 					checked
 					@endif>
 				@else
 				<script>
-					Grocy.UserSettings.scan_mode_purchase_enabled = false;
+					Grocy.UserSettings.scan_mode_consume_enabled = false;
 				</script>
 				@endif
 			</div>
@@ -47,14 +47,29 @@
 
 		<hr class="my-2">
 
-		<form id="purchase-form"
+		<form id="consume-form"
 			novalidate>
 
 			@include('components.productpicker', array(
 			'products' => $products,
 			'barcodes' => $barcodes,
-			'nextInputSelector' => '#display_amount'
+			'nextInputSelector' => '#amount',
+			'disallowAddProductWorkflows' => true
 			))
+
+			<div id="consume-exact-amount-group"
+				class="form-group d-none">
+				<div class="custom-control custom-checkbox">
+					<input class="form-check-input custom-control-input"
+						type="checkbox"
+						id="consume-exact-amount"
+						name="consume-exact-amount"
+						value="1">
+					<label class="form-check-label custom-control-label"
+						for="consume-exact-amount">{{ $__t('Consume exact amount') }}
+					</label>
+				</div>
+			</div>
 
 			@include('components.productamountpicker', array(
 			'value' => 1,
@@ -62,124 +77,71 @@
 				class="text-info font-italic d-none">' . $__t('Tare weight handling enabled - please weigh the whole container, the amount to be posted will be automatically calculcated') . '</div>'
 			))
 
-			@if(boolval($userSettings['show_purchased_date_on_purchase']))
-			@include('components.datetimepicker2', array(
-			'id' => 'purchased_date',
-			'label' => 'Purchased date',
-			'format' => 'YYYY-MM-DD',
-			'initWithNow' => true,
-			'limitEndToNow' => false,
-			'limitStartToNow' => false,
-			'invalidFeedback' => $__t('A purchased date is required'),
-			'nextInputSelector' => '#best_before_date',
-			'additionalCssClasses' => 'date-only-datetimepicker2',
-			'activateNumberPad' => GROCY_FEATURE_FLAG_STOCK_BEST_BEFORE_DATE_FIELD_NUMBER_PAD
-			))
-			@endif
-
-			@if(GROCY_FEATURE_FLAG_STOCK_BEST_BEFORE_DATE_TRACKING)
-			@include('components.datetimepicker', array(
-			'id' => 'best_before_date',
-			'label' => 'Due date',
-			'format' => 'YYYY-MM-DD',
-			'initWithNow' => false,
-			'limitEndToNow' => false,
-			'limitStartToNow' => false,
-			'invalidFeedback' => $__t('A due date is required'),
-			'nextInputSelector' => '#price',
-			'additionalCssClasses' => 'date-only-datetimepicker',
-			'shortcutValue' => '2999-12-31',
-			'shortcutLabel' => 'Never overdue',
-			'earlierThanInfoLimit' => date('Y-m-d'),
-			'earlierThanInfoText' => $__t('The given date is earlier than today, are you sure?'),
-			'activateNumberPad' => GROCY_FEATURE_FLAG_STOCK_BEST_BEFORE_DATE_FIELD_NUMBER_PAD
-			))
-			@endif
-
-			@if(GROCY_FEATURE_FLAG_STOCK_PRICE_TRACKING)
-			@include('components.numberpicker', array(
-			'id' => 'price',
-			'label' => 'Price',
-			'min' => '0.' . str_repeat('0', $userSettings['stock_decimal_places_prices_input']),
-			'decimals' => $userSettings['stock_decimal_places_prices_input'],
-			'value' => '',
-			'contextInfoId' => 'price-hint',
-			'isRequired' => false,
-			'additionalGroupCssClasses' => 'mb-1',
-			'additionalCssClasses' => 'locale-number-input locale-number-currency'
-			))
-
-			<div class="custom-control custom-radio custom-control-inline mt-n2 mb-3">
-				<input class="custom-control-input"
-					type="radio"
-					name="price-type"
-					id="price-type-unit-price"
-					value="unit-price"
-					checked
-					tabindex="-1">
-				<label class="custom-control-label"
-					for="price-type-unit-price">{{ $__t('Unit price') }}</label>
-			</div>
-			<div class="custom-control custom-radio custom-control-inline mt-n2 mb-3">
-				<input class="custom-control-input"
-					type="radio"
-					name="price-type"
-					id="price-type-total-price"
-					value="total-price"
-					tabindex="-1">
-				<label class="custom-control-label"
-					for="price-type-total-price">{{ $__t('Total price') }}</label>
-			</div>
-			@include('components.shoppinglocationpicker', array(
-			'label' => 'Store',
-			'shoppinglocations' => $shoppinglocations
-			))
-			@else
-			<input type="hidden"
-				name="price"
-				id="price"
-				value="0">
-			@endif
-
-			@if(GROCY_FEATURE_FLAG_STOCK_LOCATION_TRACKING)
-			@include('components.locationpicker', array(
-			'locations' => $locations,
-			'isRequired' => false
-			))
-			@endif
-
-			@if(GROCY_FEATURE_FLAG_LABEL_PRINTER)
-			<div class="form-group">
-				<label for="stock_label_type">{{ $__t('Stock entry label') }}</label>
-				<select class="custom-control custom-select"
-					id="stock_label_type"
-					name="stock_label_type">
-					<option value="0">{{ $__t('No label') }}</option>
-					<option value="1">{{ $__t('Single label') }}</option>
-					<option value="2">{{ $__t('Label per unit') }}</option>
+			<div class="form-group @if(!GROCY_FEATURE_FLAG_STOCK_LOCATION_TRACKING) d-none @endif">
+				<label for="location_id">{{ $__t('Location') }}</label>
+				<select required
+					class="custom-control custom-select location-combobox"
+					id="location_id"
+					name="location_id">
+					<option></option>
+					@foreach($locations as $location)
+					<option value="{{ $location->id }}">{{ $location->name }}</option>
+					@endforeach
 				</select>
-				<div id="stock-entry-label-info"
-					class="form-text text-info"></div>
+				<div class="invalid-feedback">{{ $__t('A location is required') }}</div>
 			</div>
-			@endif
 
 			<div class="form-group">
-				<label for="note">{{ $__t('Note') }}</label>
-				<div class="input-group">
-					<input type="text"
-						class="form-control"
-						id="note"
-						name="note">
+				<div class="custom-control custom-checkbox">
+					<input class="form-check-input custom-control-input"
+						type="checkbox"
+						id="spoiled"
+						name="spoiled"
+						value="1">
+					<label class="form-check-label custom-control-label"
+						for="spoiled">{{ $__t('Spoiled') }}
+					</label>
 				</div>
 			</div>
 
-			@include('components.userfieldsform', array(
-			'userfields' => $userfields,
-			'entity' => 'stock'
-			))
+			<div class="form-group">
+				<div class="custom-control custom-checkbox">
+					<input class="form-check-input custom-control-input"
+						type="checkbox"
+						id="use_specific_stock_entry"
+						name="use_specific_stock_entry"
+						value="1">
+					<label class="form-check-label custom-control-label"
+						for="use_specific_stock_entry">{{ $__t('Use a specific stock item') }}
+						&nbsp;<i class="fa-solid fa-question-circle text-muted"
+							data-toggle="tooltip"
+							data-trigger="hover click"
+							title="{{ $__t('The first item in this list would be picked by the default rule consume rule (Opened first, then first due first, then first in first out)') }}"></i>
+					</label>
+				</div>
+				<select disabled
+					class="custom-control custom-select mt-2"
+					id="specific_stock_entry"
+					name="specific_stock_entry">
+					<option></option>
+				</select>
+			</div>
 
-			<button id="save-purchase-button"
-				class="btn btn-success d-block">{{ $__t('OK') }}</button>
+			@if (GROCY_FEATURE_FLAG_RECIPES)
+			@include('components.recipepicker', array(
+			'recipes' => $recipes,
+			'isRequired' => false,
+			'hint' => $__t('This is for statistical purposes only')
+			))
+			@endif
+
+			<button id="save-consume-button"
+				class="btn btn-success">{{ $__t('OK') }}</button>
+
+			@if(GROCY_FEATURE_FLAG_STOCK_PRODUCT_OPENED_TRACKING)
+			<button id="save-mark-as-open-button"
+				class="btn btn-secondary permission-STOCK_OPEN">{{ $__t('Mark as opened') }}</button>
+			@endif
 
 		</form>
 	</div>
